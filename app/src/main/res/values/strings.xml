@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bloxstrap Mobile</string>
+
+    <!-- Home -->
+    <string name="home_state_installed">Roblox instalado</string>
+    <string name="home_state_missing">Roblox não encontrado</string>
+    <string name="home_action_launch">INICIAR ROBLOX</string>
+    <string name="home_action_install">Instalar Roblox</string>
+    <string name="home_action_open_store">Abrir página do Roblox</string>
+    <string name="home_action_settings">Configurações</string>
+    <string name="home_shizuku_ready">Shizuku pronto</string>
+    <string name="home_shizuku_unavailable">Shizuku indisponível</string>
+    <string name="home_shizuku_not_installed">Shizuku não instalado</string>
+    <string name="home_shizuku_running">Shizuku em execução</string>
+    <string name="home_shizuku_no_permission">Aguardando autorização</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Início</string>
+    <string name="nav_settings">Configurações</string>
+    <string name="nav_flags">Fast Flags</string>
+    <string name="nav_integrations">Integrações</string>
+    <string name="nav_about">Sobre</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_graphics">Gráficos</string>
+    <string name="settings_graphics_desc">Qualidade de renderização, sombras, MSAA e distância.</string>
+    <string name="settings_performance">Desempenho</string>
+    <string name="settings_performance_desc">Limite de FPS, GC, telemetria e otimizações.</string>
+    <string name="settings_launch">Iniciação</string>
+    <string name="settings_launch_desc">Pacote do Roblox e aplicar configurações ao iniciar.</string>
+    <string name="settings_personalization">Personalização</string>
+    <string name="settings_personalization_desc">Temas, presets visuais e gerenciamento de arquivos.</string>
+
+    <!-- Graphics -->
+    <string name="graphics_title">Gráficos</string>
+    <string name="graphics_quality">Qualidade gráfica</string>
+    <string name="graphics_render_distance">Distância de renderização</string>
+    <string name="graphics_msaa">MSAA</string>
+    <string name="graphics_shadows">Sombras</string>
+    <string name="graphics_postfx">Efeitos de pós-processamento</string>
+    <string name="graphics_terrain">Textures de terreno</string>
+    <string name="graphics_dynamic_resolution">Resolução dinâmica</string>
+    <string name="graphics_applied_hint">As configurações gráficas são aplicadas como Fast Flags na próxima inicialização.</string>
+
+    <!-- Performance -->
+    <string name="performance_title">Desempenho</string>
+    <string name="performance_fps_cap">Limite de FPS</string>
+    <string name="performance_gc">Otimização de GC (Luau)</string>
+    <string name="performance_reduce_motion">Reduzir animações</string>
+    <string name="performance_clear_cache">Limpar cache do Roblox na inicialização</string>
+    <string name="performance_limit_background">Limitar processos em segundo plano</string>
+    <string name="performance_applied_hint">As otimizações de desempenho são aplicadas como Fast Flags na próxima inicialização.</string>
+
+    <!-- Launch -->
+    <string name="launch_title">Iniciação</string>
+    <string name="launch_package">Pacote do Roblox</string>
+    <string name="launch_package_global">Roblox global</string>
+    <string name="launch_package_vng">Roblox VNG</string>
+    <string name="launch_package_custom">Pacote personalizado</string>
+    <string name="launch_custom_package">Pacote personalizado</string>
+    <string name="launch_apply_flags">Aplicar Fast Flags ao iniciar</string>
+    <string name="launch_apply_optimizations">Aplicar otimizações ao iniciar</string>
+    <string name="launch_last_launch">Última inicialização</string>
+    <string name="launch_none">nunca</string>
+
+    <!-- Fast Flags -->
+    <string name="flags_title">Fast Flags</string>
+    <string name="flags_search_hint">Pesquisar flag…</string>
+    <string name="flags_add">Adicionar flag</string>
+    <string name="flags_import">Importar JSON</string>
+    <string name="flags_export">Exportar JSON</string>
+    <string name="flags_presets">Presets</string>
+    <string name="flags_backups">Backups</string>
+    <string name="flags_value_true">Verdadeiro</string>
+    <string name="flags_value_false">Falso</string>
+    <string name="flags_add_title">Adicionar Fast Flag</string>
+    <string name="flags_key_label">Nome da flag</string>
+    <string name="flags_value_label">Valor</string>
+    <string name="flags_delete_title">Excluir flag</string>
+    <string name="flags_delete_message">Excluir %1$s? Essa ação pode ser revertida com um backup.</string>
+    <string name="flags_empty">Nenhuma flag configurada. Adicione uma ou importe um JSON.</string>
+    <string name="flags_unverified_warning">Essa flag não está na lista de permitidas. Ela será marcada como não verificada e pode não funcionar.</string>
+    <string name="flags_import_success">%1$s flag(s) importada(s).</string>
+    <string name="flags_import_failed">Falha ao importar JSON: %1$s</string>
+    <string name="flags_export_success">Exportado com sucesso.</string>
+    <string name="flags_export_failed">Falha ao exportar: %1$s</string>
+    <string name="flags_category_graphics">Gráficos</string>
+    <string name="flags_category_performance">Desempenho</string>
+    <string name="flags_category_network">Rede</string>
+    <string name="flags_category_telemetry">Telemetria</string>
+    <string name="flags_category_audio">Áudio</string>
+    <string name="flags_category_ui">Interface</string>
+    <string name="flags_category_other">Outras</string>
+    <string name="flags_preset_perf_balanced">Desempenho equilibrado</string>
+    <string name="flags_preset_perf_max">Máximo de FPS</string>
+    <string name="flags_preset_graphics_low">Gráficos baixos</string>
+    <string name="flags_preset_privacy">Privacidade (sem telemetria)</string>
+    <string name="flags_preset_network">Rede otimizada</string>
+    <string name="flags_preset_delete">Excluir preset</string>
+    <string name="flags_backup_create">Criar backup</string>
+    <string name="flags_backup_restore">Restaurar</string>
+    <string name="flags_backup_delete">Excluir</string>
+    <string name="flags_backup_empty">Nenhum backup disponível.</string>
+    <string name="flags_applied_status">Aplicadas na inicialização</string>
+    <string name="flags_pending_status">Aguardando privilégios</string>
+    <string name="flags_not_applied_status">Não aplicadas (sem Shizuku/root)</string>
+
+    <!-- Personalization -->
+    <string name="personalization_title">Personalização</string>
+    <string name="personalization_theme">Tema</string>
+    <string name="personalization_theme_system">Sistema</string>
+    <string name="personalization_theme_dark">Escuro</string>
+    <string name="personalization_theme_light">Claro</string>
+    <string name="personalization_accent">Cor de acento</string>
+    <string name="personalization_presets">Presets visuais</string>
+    <string name="personalization_files">Gerenciamento de arquivos</string>
+    <string name="personalization_files_desc">Arquivos próprios do aplicativo (temas, JSON, configurações exportadas).</string>
+    <string name="personalization_files_empty">Nenhum arquivo próprio encontrado.</string>
+    <string name="personalization_backup">Backup e restauração</string>
+    <string name="personalization_backup_desc">Backup completo de configurações e Fast Flags.</string>
+    <string name="personalization_backup_create">Criar backup</string>
+    <string name="personalization_backup_restore">Restaurar backup</string>
+    <string name="personalization_restore_success">Backup restaurado com sucesso.</string>
+    <string name="personalization_restore_failed">Falha ao restaurar: %1$s</string>
+
+    <!-- Integrations -->
+    <string name="integrations_title">Integrações</string>
+    <string name="integrations_shizuku">Shizuku</string>
+    <string name="integrations_shizuku_desc">Integração opcional para aplicar Fast Flags e executar diagnósticos com privilégios.</string>
+    <string name="integrations_request_permission">Solicitar autorização</string>
+    <string name="integrations_diagnostics">Diagnóstico</string>
+    <string name="integrations_diagnostics_desc">Relatório do dispositivo, Roblox e estado do Shizuku.</string>
+    <string name="integrations_generate">Gerar relatório</string>
+    <string name="integrations_copy">Copiar</string>
+    <string name="integrations_copy_done">Relatório copiado.</string>
+    <string name="integrations_status_installed">Instalado</string>
+    <string name="integrations_status_not_installed">Não instalado</string>
+    <string name="integrations_status_running">Serviço ativo</string>
+    <string name="integrations_status_stopped">Serviço inativo</string>
+    <string name="integrations_status_granted">Autorizado</string>
+    <string name="integrations_status_denied">Não autorizado</string>
+    <string name="integrations_status_unknown">Desconhecido</string>
+    <string name="integrations_status_uid">UID: %1$d</string>
+
+    <!-- About -->
+    <string name="about_title">Sobre</string>
+    <string name="about_version">Versão</string>
+    <string name="about_credits">Créditos</string>
+    <string name="about_licenses">Licenças</string>
+    <string name="about_repo">Repositório GitHub</string>
+    <string name="about_description">Bloxstrap Mobile é um gerenciador e inicializador independente do Roblox para Android, inspirado no Bloxstrap original.</string>
+    <string name="about_license_summary">Open Source — MIT</string>
+
+    <!-- Common -->
+    <string name="common_save">Salvar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_delete">Excluir</string>
+    <string name="common_ok">OK</string>
+    <string name="common_close">Fechar</string>
+    <string name="common_error">Erro: %1$s</string>
+    <string name="common_copied">Copiado</string>
+    <string name="common_loading">Carregando…</string>
+    <string name="common_retry">Tentar novamente</string>
+    <string name="common_refresh">Atualizar</string>
+    <string name="common_enabled">Ativado</string>
+    <string name="common_disabled">Desativado</string>
+</resources>
