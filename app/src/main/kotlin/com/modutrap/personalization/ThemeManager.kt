@@ -47,7 +47,7 @@ object ThemeManager {
 
             9 -> runCatching {
                 Color(
-                    alpha = h.substring(1, 3).toInt(16) / 255f,
+                    alpha = h.substring(1, 3).toInt(16),
                     red = h.substring(3, 5).toInt(16),
                     green = h.substring(5, 7).toInt(16),
                     blue = h.substring(7, 9).toInt(16)

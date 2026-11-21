@@ -129,7 +129,7 @@ class FFlagRepository {
         val src = AppPaths.clientAppSettingsFile
         if (!src.exists()) return@withContext false
         val dst = File(AppPaths.backupsDir, sanitizeName(name) + ".json")
-        val ok = src.copyTo(dst, overwrite = true)
+        val ok = runCatching { src.copyTo(dst, overwrite = true); dst.exists() }.getOrDefault(false)
         Logger.writeLine("FFlagRepository::backup", "Backup: ${dst.absolutePath}")
         ok
     }
@@ -137,7 +137,10 @@ class FFlagRepository {
     suspend fun restore(name: String): Boolean = withContext(Dispatchers.IO) {
         val src = File(AppPaths.backupsDir, sanitizeName(name) + ".json")
         if (!src.exists()) return@withContext false
-        val ok = src.copyTo(AppPaths.clientAppSettingsFile, overwrite = true)
+        val ok = runCatching {
+            src.copyTo(AppPaths.clientAppSettingsFile, overwrite = true)
+            AppPaths.clientAppSettingsFile.exists()
+        }.getOrDefault(false)
         if (ok) load()
         ok
     }
