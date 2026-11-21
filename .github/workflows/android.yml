@@ -70,10 +70,9 @@ jobs:
           ./gradlew :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/gradle-debug.log
           rc=${PIPESTATUS[0]}
           if [ "$rc" -ne 0 ]; then
-            echo "### Gradle build failed (exit $rc). Last 150 log lines:" >> "$GITHUB_STEP_SUMMARY"
-            echo '```text' >> "$GITHUB_STEP_SUMMARY"
-            tail -n 150 /tmp/gradle-debug.log >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            grep -nE "error:|e: |What went wrong|Execution failed|Caused by|> Task.*FAILED|BUILD FAILED|Could not|Unresolved|not found|FAILURE:" /tmp/gradle-debug.log | head -40 | while IFS= read -r line; do
+              echo "::error::$line"
+            done
           fi
           exit "$rc"
 
