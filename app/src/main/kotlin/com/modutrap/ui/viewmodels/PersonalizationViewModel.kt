@@ -11,6 +11,7 @@ import java.io.File
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 /** Drives the Personalization screen: theme, accent, visual presets, files, backups. */
@@ -46,13 +47,13 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun setTheme(mode: String) {
-        launch {
+        viewModelScope.launch {
             container.settings.put(com.modutrap.settings.SettingsRepository.Keys.themeMode, mode)
         }
     }
 
     fun setAccent(hex: String) {
-        launch {
+        viewModelScope.launch {
             if (ThemeManager.isValidHex(hex)) {
                 container.settings.put(com.modutrap.settings.SettingsRepository.Keys.accentColor, hex)
             } else {
@@ -69,7 +70,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
             themeMode = current.themeMode,
             accentColor = current.accentColor
         )
-        launch {
+        viewModelScope.launch {
             val ok = container.personalization.saveVisualPreset(preset)
             _message.value = if (ok) "Preset visual salvo: $name" else "Falha ao salvar o preset."
             refresh()
@@ -77,7 +78,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun applyVisualPreset(preset: VisualPreset) {
-        launch {
+        viewModelScope.launch {
             container.settings.put(com.modutrap.settings.SettingsRepository.Keys.themeMode, preset.themeMode)
             container.settings.put(com.modutrap.settings.SettingsRepository.Keys.accentColor, preset.accentColor)
             _message.value = "Preset aplicado: ${preset.name}"
@@ -85,7 +86,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun deleteVisualPreset(id: String) {
-        launch {
+        viewModelScope.launch {
             container.personalization.deleteVisualPreset(id)
             _message.value = "Preset visual excluído."
             refresh()
@@ -93,7 +94,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun saveCustomFile(name: String, content: String) {
-        launch {
+        viewModelScope.launch {
             val ok = container.personalization.saveCustomFile(name, content)
             _message.value = if (ok) "Arquivo salvo: $name" else "Falha ao salvar o arquivo."
             refresh()
@@ -101,7 +102,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun deleteCustomFile(name: String) {
-        launch {
+        viewModelScope.launch {
             container.personalization.deleteCustomFile(name)
             _message.value = "Arquivo excluído: $name"
             refresh()
@@ -111,7 +112,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     fun readCustomFile(name: String): String? = container.personalization.readCustomFile(name)
 
     fun createBackup(name: String) {
-        launch {
+        viewModelScope.launch {
             _busy.value = true
             val file = container.backups.createBackup(name)
             _message.value = if (file != null) "Backup criado: ${file.name}" else "Falha ao criar o backup."
@@ -121,7 +122,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun restoreBackup(backup: BackupFile) {
-        launch {
+        viewModelScope.launch {
             _busy.value = true
             val ok = container.backups.restore(backup)
             _message.value = if (ok) "Backup restaurado: ${backup.name}" else "Falha ao restaurar o backup."
@@ -131,7 +132,7 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun deleteBackup(backup: BackupFile) {
-        launch {
+        viewModelScope.launch {
             container.backups.delete(backup)
             _message.value = "Backup excluído."
             refresh()
