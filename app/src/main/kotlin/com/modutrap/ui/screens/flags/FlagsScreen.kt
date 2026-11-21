@@ -500,7 +500,13 @@ private fun exportUri(
 ) {
     val text = produce()
     val ok = runCatching {
-        context.contentResolver.openOutputStream(uri)?.use { it.write(text.toByteArray()) }
+        val os = context.contentResolver.openOutputStream(uri)
+        if (os != null) {
+            os.use { it.write(text.toByteArray()) }
+            true
+        } else {
+            false
+        }
     }.getOrDefault(false)
     if (!ok) {
         // Fallback: share the exported JSON via an intent if the document write failed.

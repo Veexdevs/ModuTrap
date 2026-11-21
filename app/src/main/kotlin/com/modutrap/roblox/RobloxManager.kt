@@ -79,7 +79,7 @@ class RobloxManager(private val context: Context) {
 
     fun dataDir(pkg: String): String? = try {
         val info: ApplicationInfo = pm.getApplicationInfo(pkg, 0)
-        info.dataDir.absolutePath
+        info.dataDir
     } catch (_: Exception) {
         null
     }

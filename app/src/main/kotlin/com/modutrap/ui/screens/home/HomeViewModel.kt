@@ -1,6 +1,7 @@
 package com.modutrap.ui.screens.home
 
 import android.app.Application
+import androidx.lifecycle.viewModelScope
 import com.modutrap.models.LaunchResult
 import com.modutrap.models.RobloxStatus
 import com.modutrap.models.ShizukuStatus
@@ -38,7 +39,7 @@ class HomeViewModel(app: Application) : BaseViewModel(app) {
 
     init {
         // Recompute Roblox status whenever the chosen package changes.
-        launch {
+        viewModelScope.launch {
             container.settings.settings.collect { refresh() }
         }
         refresh()
@@ -52,7 +53,7 @@ class HomeViewModel(app: Application) : BaseViewModel(app) {
 
     fun launch() {
         if (_launching.value) return
-        launch {
+        viewModelScope.launch {
             _launching.value = true
             try {
                 _result.value = container.launcher.launch()
