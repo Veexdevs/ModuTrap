@@ -33,6 +33,6 @@ class SettingsViewModel(app: Application) : BaseViewModel(app) {
 
     /** Persist a full [AppSettings] snapshot (used by backup restore). */
     fun save(settings: AppSettings) {
-        launch { repo.set(settings) }
+        viewModelScope.launch { repo.set(settings) }
     }
 }

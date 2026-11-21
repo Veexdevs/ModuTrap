@@ -41,9 +41,11 @@ class PersonalizationViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun refresh() {
-        _visualPresets.value = container.personalization.listVisualPresets()
-        _files.value = container.personalization.listCustomFiles()
-        _backups.value = container.backups.listBackups()
+        viewModelScope.launch {
+            _visualPresets.value = container.personalization.listVisualPresets()
+            _files.value = container.personalization.listCustomFiles()
+            _backups.value = container.backups.listBackups()
+        }
     }
 
     fun setTheme(mode: String) {
