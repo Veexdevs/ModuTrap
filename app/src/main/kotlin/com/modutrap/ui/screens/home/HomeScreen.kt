@@ -17,11 +17,13 @@ import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -51,6 +53,7 @@ import com.modutrap.ui.theme.AppColors
 import kotlinx.coroutines.launch
 
 /** HOME: Roblox + Shizuku status, the primary launch action and settings entry. */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit) {
     val vm: HomeViewModel = viewModel()
@@ -173,7 +176,8 @@ fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit) {
 
                     if (roblox.installed) {
                         InfoLine("Versão", roblox.versionName ?: "desconhecida")
-                        if (roblox.dataDir != null) InfoLine("Data dir", roblox.dataDir)
+                        val dir = roblox.dataDir
+                        if (dir != null) InfoLine("Data dir", dir)
                         InfoLine(
                             "Build",
                             if (roblox.isDebugBuild) "Debug" else "Release"

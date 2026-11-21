@@ -9,6 +9,7 @@ import com.modutrap.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 /**
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 class FlagsViewModel(app: Application) : BaseViewModel(app) {
 
     private val repo get() = container.flags
-    private val presets get() = container.presets
+    private val presetRepo get() = container.presets
 
     private val _flags = MutableStateFlow<List<FFlagEntry>>(emptyList())
     val flags: StateFlow<List<FFlagEntry>> = _flags.asStateFlow()
@@ -43,10 +44,10 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun load() {
-        launch {
+        viewModelScope.launch {
             repo.load()
             _flags.value = repo.flags.value
-            _presets.value = presets.listFlagPresets()
+            _presets.value = presetRepo.listFlagPresets()
             _backups.value = repo.listBackups()
         }
     }
@@ -63,7 +64,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun addOrUpdate(key: String, value: String) {
-        launch {
+        viewModelScope.launch {
             val outcome = repo.upsert(key, value)
             _flags.value = repo.flags.value
             if (outcome.success) {
@@ -76,7 +77,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun delete(key: String) {
-        launch {
+        viewModelScope.launch {
             repo.delete(key)
             _flags.value = repo.flags.value
             _backups.value = repo.listBackups()
@@ -85,7 +86,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun clearAll() {
-        launch {
+        viewModelScope.launch {
             repo.clear()
             _flags.value = repo.flags.value
             _message.value = "Todas as flags foram removidas."
@@ -93,7 +94,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun importJson(raw: String, replace: Boolean) {
-        launch {
+        viewModelScope.launch {
             _busy.value = true
             val result: ImportResult = repo.importJson(raw, replace)
             _flags.value = repo.flags.value
@@ -108,7 +109,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun applyPreset(preset: FlagPreset) {
-        launch {
+        viewModelScope.launch {
             repo.clear()
             val merged = preset.flags.map { FFlagEntry(it.key, it.value) }
             repo.save(merged)
@@ -119,23 +120,23 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
 
     fun savePreset(id: String, name: String, description: String) {
         val preset = FlagPreset(id, name, description, _flags.value.associate { it.key to it.value })
-        launch {
-            presets.saveFlagPreset(preset)
-            _presets.value = presets.listFlagPresets()
+        viewModelScope.launch {
+            presetRepo.saveFlagPreset(preset)
+            _presets.value = presetRepo.listFlagPresets()
             _message.value = "Preset salvo: $name"
         }
     }
 
     fun deletePreset(id: String) {
-        launch {
-            presets.deleteFlagPreset(id)
-            _presets.value = presets.listFlagPresets()
+        viewModelScope.launch {
+            presetRepo.deleteFlagPreset(id)
+            _presets.value = presetRepo.listFlagPresets()
             _message.value = "Preset excluído."
         }
     }
 
     fun createBackup(name: String) {
-        launch {
+        viewModelScope.launch {
             val ok = repo.backup(name)
             _backups.value = repo.listBackups()
             _message.value = if (ok) "Backup criado: $name" else "Falha ao criar o backup."
@@ -143,7 +144,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun restoreBackup(name: String) {
-        launch {
+        viewModelScope.launch {
             val ok = repo.restore(name)
             _flags.value = repo.flags.value
             _backups.value = repo.listBackups()
@@ -152,7 +153,7 @@ class FlagsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun deleteBackup(name: String) {
-        launch {
+        viewModelScope.launch {
             repo.deleteBackup(name)
             _backups.value = repo.listBackups()
             _message.value = "Backup excluído."

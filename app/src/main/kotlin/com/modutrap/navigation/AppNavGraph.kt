@@ -1,9 +1,8 @@
 package com.modutrap.navigation
 
-import androidx.compose.foundation.layout.InsetType
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.only
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Devices
@@ -66,7 +65,7 @@ fun AppNavGraph(container: AppContainer) {
         // Reserve only the bottom (navigation bar) inset here; each screen's
         // TopAppBar (or the Home screen's statusBarsPadding) handles the top
         // status bar so app bars sit correctly under it.
-        contentWindowInsets = WindowInsets.only(InsetType.BOTTOM),
+        contentWindowInsets = WindowInsets.navigationBars,
         bottomBar = {
             if (currentRoute in bottomBarRoutes) {
                 NavigationBar {

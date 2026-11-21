@@ -5,6 +5,7 @@ import com.modutrap.settings.AppSettings
 import com.modutrap.settings.SettingsRepository
 import com.modutrap.ui.BaseViewModel
 import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 /**
@@ -23,7 +24,7 @@ class SettingsViewModel(app: Application) : BaseViewModel(app) {
 
     /** Apply [block] to the current snapshot and persist the result. */
     fun update(block: AppSettings.() -> AppSettings) {
-        launch {
+        viewModelScope.launch {
             val current = repo.settings.value
             val updated = current.block()
             repo.set(updated)
@@ -32,6 +33,6 @@ class SettingsViewModel(app: Application) : BaseViewModel(app) {
 
     /** Persist a full [AppSettings] snapshot (used by backup restore). */
     fun save(settings: AppSettings) {
-        launch { repo.set(settings) }
+        viewModelScope.launch { repo.set(settings) }
     }
 }

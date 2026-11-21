@@ -97,7 +97,7 @@ fun FlagsScreen(container: AppContainer) {
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
     ) { uri ->
-        uri?.let { exportUri(context, it) { text -> vm.exportJson() } }
+        uri?.let { exportUri(context, it) { vm.exportJson() } }
     }
 
     val visible = vm.visibleFlags()
@@ -500,7 +500,13 @@ private fun exportUri(
 ) {
     val text = produce()
     val ok = runCatching {
-        context.contentResolver.openOutputStream(uri)?.use { it.write(text.toByteArray()) }
+        val os = context.contentResolver.openOutputStream(uri)
+        if (os != null) {
+            os.use { it.write(text.toByteArray()) }
+            true
+        } else {
+            false
+        }
     }.getOrDefault(false)
     if (!ok) {
         // Fallback: share the exported JSON via an intent if the document write failed.
@@ -508,7 +514,7 @@ private fun exportUri(
             val share = Intent(Intent.ACTION_SEND).apply {
                 type = "application/json"
                 putExtra(Intent.EXTRA_STREAM, uri)
-                addFlags(Intent.FLAG_GRANT_READ_PERMISSION)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
             context.startActivity(Intent.createChooser(share, "Exportar Fast Flags"))
         }

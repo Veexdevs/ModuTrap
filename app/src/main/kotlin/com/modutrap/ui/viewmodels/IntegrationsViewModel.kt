@@ -7,6 +7,7 @@ import com.modutrap.ui.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 /** Drives the Integrações screen: Shizuku status and diagnostics. */
@@ -36,7 +37,7 @@ class IntegrationsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     fun generateReport() {
-        launch {
+        viewModelScope.launch {
             _report.value = container.diagnostics.build()
             _message.value = "Relatório de diagnóstico gerado."
         }
