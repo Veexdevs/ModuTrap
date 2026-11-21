@@ -97,7 +97,7 @@ fun FlagsScreen(container: AppContainer) {
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
     ) { uri ->
-        uri?.let { exportUri(context, it) { text -> vm.exportJson() } }
+        uri?.let { exportUri(context, it) { vm.exportJson() } }
     }
 
     val visible = vm.visibleFlags()

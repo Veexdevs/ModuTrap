@@ -77,9 +77,12 @@ class RobloxManager(private val context: Context) {
         (info.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
     }.getOrDefault(false)
 
-    fun dataDir(pkg: String): String? = runCatching {
-        pm.getApplicationInfo(pkg, 0).dataDir.absolutePath
-    }.getOrNull()
+    fun dataDir(pkg: String): String? = try {
+        val info: ApplicationInfo = pm.getApplicationInfo(pkg, 0)
+        info.dataDir.absolutePath
+    } catch (_: Exception) {
+        null
+    }
 
     fun hasLaunchIntent(pkg: String): Boolean = runCatching {
         pm.getLaunchIntentForPackage(pkg) != null
