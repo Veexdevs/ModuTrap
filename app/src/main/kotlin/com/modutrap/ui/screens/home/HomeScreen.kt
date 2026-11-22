@@ -124,9 +124,7 @@ fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit) {
                     .clip(RoundedCornerShape(28.dp))
                     .background(
                         Brush.linearGradient(
-                            listOf(Color(0xFF8B5CF6), Color(0xFF6D28D9)),
-                            start = Alignment.TopStart,
-                            end = Alignment.BottomEnd
+                            listOf(Color(0xFF8B5CF6), Color(0xFF6D28D9))
                         )
                     ),
                 contentAlignment = Alignment.Center
