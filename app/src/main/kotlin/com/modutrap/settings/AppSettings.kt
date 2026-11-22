@@ -41,7 +41,10 @@ data class AppSettings(
     val accentColor: String = "#8B5CF6",
 
     // Integrations
-    val shizukuAutoRequest: Boolean = false
+    val shizukuAutoRequest: Boolean = false,
+
+    // In-game overlay
+    val inGameOverlayEnabled: Boolean = false
 ) {
     companion object {
         val defaults = AppSettings()
@@ -66,7 +69,8 @@ data class AppSettings(
             lastLaunchTs = p[SettingsRepository.Keys.lastLaunchTs] ?: "",
             themeMode = p[SettingsRepository.Keys.themeMode] ?: "system",
             accentColor = p[SettingsRepository.Keys.accentColor] ?: "#8B5CF6",
-            shizukuAutoRequest = p[SettingsRepository.Keys.shizukuAutoRequest] ?: false
+            shizukuAutoRequest = p[SettingsRepository.Keys.shizukuAutoRequest] ?: false,
+            inGameOverlayEnabled = p[SettingsRepository.Keys.inGameOverlayEnabled] ?: false
         )
     }
 }

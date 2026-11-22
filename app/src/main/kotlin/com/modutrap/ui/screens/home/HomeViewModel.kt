@@ -51,12 +51,26 @@ class HomeViewModel(app: Application) : BaseViewModel(app) {
         _shizuku.value = container.shizuku.status(app)
     }
 
+    /** Apply [block] to the current settings snapshot and persist the result. */
+    fun update(block: com.modutrap.settings.AppSettings.() -> com.modutrap.settings.AppSettings) {
+        viewModelScope.launch {
+            val current = container.settings.settings.value
+            container.settings.set(current.block())
+        }
+    }
+
     fun launch() {
         if (_launching.value) return
         viewModelScope.launch {
             _launching.value = true
             try {
-                _result.value = container.launcher.launch()
+                val result = container.launcher.launch()
+                _result.value = result
+                // If the in-game overlay is enabled, start it right after Roblox
+                // launches so the floating menu appears on top of the game.
+                if (result is LaunchResult.Success && container.settings.settings.value.inGameOverlayEnabled) {
+                    com.modutrap.services.InGameOverlayService.start(app)
+                }
             } catch (e: Exception) {
                 _result.value = LaunchResult.Failure("Erro ao iniciar: ${e.message}", e)
             } finally {
@@ -64,6 +78,17 @@ class HomeViewModel(app: Application) : BaseViewModel(app) {
             }
         }
     }
+
+    fun startOverlay() {
+        com.modutrap.services.InGameOverlayService.start(app)
+    }
+
+    fun stopOverlay() {
+        com.modutrap.services.InGameOverlayService.stop(app)
+    }
+
+    fun isOverlayRunning(): Boolean =
+        com.modutrap.services.InGameOverlayService.isRunning(app)
 
     fun openInstallPage() {
         val ok = container.roblox.openInstallPage()

@@ -45,6 +45,7 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
         val themeMode = stringPreferencesKey("theme_mode")
         val accentColor = stringPreferencesKey("accent_color")
         val shizukuAutoRequest = booleanPreferencesKey("shizuku_auto_request")
+        val inGameOverlayEnabled = booleanPreferencesKey("in_game_overlay_enabled")
     }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -86,6 +87,7 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
             p[Keys.themeMode] = settings.themeMode
             p[Keys.accentColor] = settings.accentColor
             p[Keys.shizukuAutoRequest] = settings.shizukuAutoRequest
+            p[Keys.inGameOverlayEnabled] = settings.inGameOverlayEnabled
         }
     }
 }

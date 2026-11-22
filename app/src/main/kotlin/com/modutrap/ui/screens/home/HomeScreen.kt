@@ -1,6 +1,8 @@
 package com.modutrap.ui.screens.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,10 +13,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +36,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -40,14 +48,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.modutrap.R
 import com.modutrap.core.AppContainer
 import com.modutrap.models.LaunchResult
+import com.modutrap.services.OverlayPermission
 import com.modutrap.ui.components.StatusPill
 import com.modutrap.ui.theme.AppColors
 import kotlinx.coroutines.launch
@@ -102,23 +116,40 @@ fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit) {
         ) {
             Spacer(Modifier.height(24.dp))
 
-            // Hero: logo + name.
-            Icon(
-                painter = painterResource(R.drawable.app_logo),
-                contentDescription = null,
-                modifier = Modifier.size(96.dp)
-            )
-            Spacer(Modifier.height(12.dp))
-            Text(
-                text = "Bloxstrap Mobile",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "Gerenciador e inicializador independente do Roblox",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            // Hero: logo + name on a gradient panel.
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 20.dp)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(
+                        Brush.linearGradient(
+                            listOf(Color(0xFF8B5CF6), Color(0xFF6D28D9))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.app_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(72.dp)
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        text = "Bloxstrap Mobile",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "Gerenciador e inicializador independente do Roblox",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.85f)
+                    )
+                }
+            }
             Spacer(Modifier.height(20.dp))
 
             // Shizuku status.
@@ -221,6 +252,11 @@ fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit) {
             }
             Spacer(Modifier.height(20.dp))
 
+            // In-game overlay card.
+            OverlayCard(container, vm)
+
+            Spacer(Modifier.height(20.dp))
+
             // Settings entry.
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -303,4 +339,118 @@ private fun LaunchResultDialog(result: LaunchResult, onDismiss: () -> Unit) {
         text = { Text(body) },
         confirmButton = { TextButton(onClick = onDismiss) { Text("OK") } }
     )
+}
+
+/**
+ * "Menu no jogo": toggles the floating in-game overlay, shows the
+ * SYSTEM_ALERT_WINDOW permission status (with a request button), and lets the
+ * user start/stop the overlay manually.
+ */
+@Composable
+private fun OverlayCard(container: AppContainer, vm: HomeViewModel) {
+    val context = LocalContext.current
+    val settings by container.settings.settings.collectAsStateWithLifecycle()
+    val permissionGranted = remember { OverlayPermission.isGranted(context) }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        // Permission result arrives here; the state recomposes on next read.
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        )
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Outlined.Layers, contentDescription = null)
+                Spacer(Modifier.width(14.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        "Menu no jogo",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        "Menu flutuante dentro do Roblox, com minimizar e arrastar.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+
+            // Enable toggle.
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Ativar menu no jogo",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    checked = settings.inGameOverlayEnabled,
+                    onCheckedChange = { vm.update { copy(inGameOverlayEnabled = it) } }
+                )
+            }
+
+            // Permission status.
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                StatusPill(
+                    text = if (permissionGranted) "Permissão concedida" else "Permissão ausente",
+                    color = if (permissionGranted) AppColors.Success else AppColors.Warning
+                )
+                Spacer(Modifier.width(10.dp))
+                if (!permissionGranted) {
+                    OutlinedButton(
+                        onClick = {
+                            runCatching {
+                                permissionLauncher.launch(OverlayPermission.manageIntent(context))
+                            }
+                        },
+                        shape = MaterialTheme.shapes.small
+                    ) { Text("Solicitar permissão") }
+                }
+            }
+
+            // Start / stop buttons.
+            Spacer(Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                OutlinedButton(
+                    onClick = { vm.startOverlay() },
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Icon(Icons.Outlined.Layers, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Iniciar menu no jogo")
+                }
+                OutlinedButton(
+                    onClick = { vm.stopOverlay() },
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Icon(Icons.Outlined.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("Fechar menu no jogo")
+                }
+            }
+        }
+    }
 }
