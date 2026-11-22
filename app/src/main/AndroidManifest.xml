@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Floating in-game overlay menu: draws the ModuTrap menu on top of Roblox. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!--
         Package visibility on Android 11+ (API 30+). Roblox and Shizuku are
         declared explicitly so getPackageInfo()/version queries keep working
@@ -69,6 +71,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+            In-game floating overlay: hosts the Compose menu on top of the
+            Roblox game (TYPE_APPLICATION_OVERLAY). Declared as a foreground
+            service so the window stays alive while Roblox is in the foreground.
+        -->
+        <service
+            android:name=".services.InGameOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
 
         <!--
             Shizuku provider: lets Shizuku hand its privileged binder to this

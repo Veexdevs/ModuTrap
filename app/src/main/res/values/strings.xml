@@ -153,6 +153,23 @@
     <string name="about_description">Bloxstrap Mobile é um gerenciador e inicializador independente do Roblox para Android, inspirado no Bloxstrap original.</string>
     <string name="about_license_summary">Open Source — MIT</string>
 
+    <!-- In-game overlay -->
+    <string name="overlay_title">Menu no jogo</string>
+    <string name="overlay_description">Exibe o menu flutuante do ModuTrap dentro do Roblox, com minimizar e arrastar.</string>
+    <string name="overlay_enable">Ativar menu no jogo</string>
+    <string name="overlay_enable_desc">Mostra o menu flutuante sobre o Roblox ao iniciá-lo.</string>
+    <string name="overlay_permission">Permissão de sobreposição</string>
+    <string name="overlay_permission_desc">O menu flutuante precisa de permissão para aparecer sobre outros apps.</string>
+    <string name="overlay_request_permission">Solicitar permissão</string>
+    <string name="overlay_permission_granted">Permissão concedida</string>
+    <string name="overlay_permission_missing">Permissão ausente</string>
+    <string name="overlay_start">Iniciar menu no jogo</string>
+    <string name="overlay_stop">Fechar menu no jogo</string>
+    <string name="overlay_minimize">Minimizar</string>
+    <string name="overlay_dismiss">Fechar</string>
+    <string name="overlay_apply_now">Aplicar agora</string>
+    <string name="overlay_relaunch">Reiniciar</string>
+
     <!-- Common -->
     <string name="common_save">Salvar</string>
     <string name="common_cancel">Cancelar</string>
