@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
@@ -226,9 +227,13 @@ class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner, ViewMo
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
-        // The foreground service type ("specialUse") is declared in the
-        // manifest, so the 3-arg overload is sufficient on all API levels.
-        ServiceCompat.startForeground(this, NOTIFICATION_ID, notification)
+        // Pass the foreground service type explicitly; "specialUse" is also
+        // declared in the manifest. ServiceInfo constants are compile-time
+        // ints, so referencing the API 34 constant is safe on all levels.
+        ServiceCompat.startForeground(
+            this, NOTIFICATION_ID, notification,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+        )
     }
 
     companion object {

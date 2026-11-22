@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Layers
@@ -121,7 +122,13 @@ fun HomeScreen(container: AppContainer, onNavigate: (String) -> Unit) {
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 20.dp)
                     .clip(RoundedCornerShape(28.dp))
-                    .background(painterResource(R.drawable.bg_hero_gradient)),
+                    .background(
+                        Brush.linearGradient(
+                            listOf(Color(0xFF8B5CF6), Color(0xFF6D28D9)),
+                            start = Alignment.TopStart,
+                            end = Alignment.BottomEnd
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
