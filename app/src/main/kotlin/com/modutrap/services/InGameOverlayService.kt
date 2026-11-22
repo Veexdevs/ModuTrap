@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
@@ -59,6 +58,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistry
@@ -72,6 +73,7 @@ import com.modutrap.core.AppContainer
 import com.modutrap.personalization.ThemeManager
 import com.modutrap.ui.theme.BloxstrapMobileTheme
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /**
  * Floating in-game overlay for ModuTrap.
@@ -90,11 +92,15 @@ import kotlinx.coroutines.launch
  * foreground. Requires the `SYSTEM_ALERT_WINDOW` permission, granted through
  * the "Menu no jogo" card on the Home screen.
  */
-class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner {
+class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner, ViewModelStoreOwner {
 
     private val savedStateRegistryController: SavedStateRegistryController by lazy {
         SavedStateRegistryController.create(this)
     }
+
+    private val internalViewModelStore = ViewModelStore()
+    override val viewModelStore: ViewModelStore
+        get() = internalViewModelStore
 
     private lateinit var windowManager: WindowManager
     private var overlayView: ComposeView? = null
@@ -131,7 +137,7 @@ class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner {
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent): IBinder? = null
 
     // ---- Window management ------------------------------------------------
 
@@ -220,14 +226,9 @@ class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner {
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ServiceCompat.startForeground(
-                this, NOTIFICATION_ID, notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-            )
-        } else {
-            ServiceCompat.startForeground(this, NOTIFICATION_ID, notification)
-        }
+        // The foreground service type ("specialUse") is declared in the
+        // manifest, so the 3-arg overload is sufficient on all API levels.
+        ServiceCompat.startForeground(this, NOTIFICATION_ID, notification)
     }
 
     companion object {
@@ -375,11 +376,11 @@ private fun InGameMenuCard(
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = onMinimize, contentDescription = "Minimizar") {
-                    Icon(Icons.Outlined.Minimize, contentDescription = null)
+                IconButton(onClick = onMinimize) {
+                    Icon(Icons.Outlined.Minimize, contentDescription = "Minimizar")
                 }
-                IconButton(onClick = onDismiss, contentDescription = "Fechar") {
-                    Icon(Icons.Outlined.Close, contentDescription = null)
+                IconButton(onClick = onDismiss) {
+                    Icon(Icons.Outlined.Close, contentDescription = "Fechar")
                 }
             }
             Spacer(Modifier.height(12.dp))
