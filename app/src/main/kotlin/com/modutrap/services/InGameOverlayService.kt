@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
@@ -58,8 +59,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
@@ -71,7 +72,6 @@ import com.modutrap.core.AppContainer
 import com.modutrap.personalization.ThemeManager
 import com.modutrap.ui.theme.BloxstrapMobileTheme
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /**
  * Floating in-game overlay for ModuTrap.
@@ -150,9 +150,9 @@ class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner {
                 )
             }
             // Bind the three ViewTree owners Compose needs inside a Service.
-            ViewTreeLifecycleOwner.set(this, this@InGameOverlayService)
-            ViewTreeViewModelStoreOwner.set(this, this@InGameOverlayService)
-            setViewTreeSavedStateRegistryOwner(this@InGameOverlayService)
+            this.setViewTreeLifecycleOwner(this@InGameOverlayService)
+            this.setViewTreeViewModelStoreOwner(this@InGameOverlayService)
+            this.setViewTreeSavedStateRegistryOwner(this@InGameOverlayService)
         }
 
         val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -172,7 +172,7 @@ class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner {
             gravity = Gravity.TOP or Gravity.START
             if (windowX < 0 || windowY < 0) {
                 // Center-top of the screen by default.
-                windowX = (resources.displayMetrics.widthPixels / 3).roundToInt()
+                windowX = resources.displayMetrics.widthPixels / 3
                 windowY = 120
             }
             x = windowX
@@ -223,7 +223,7 @@ class InGameOverlayService : LifecycleService(), SavedStateRegistryOwner {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             ServiceCompat.startForeground(
                 this, NOTIFICATION_ID, notification,
-                ServiceCompat.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
             )
         } else {
             ServiceCompat.startForeground(this, NOTIFICATION_ID, notification)
